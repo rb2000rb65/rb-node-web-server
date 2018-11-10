@@ -2,7 +2,10 @@ const express = require('express');
 const hbs = require('hbs');
 const fs = require('fs');
 
+const port = process.env.port || 3000;
+
 var app = express();
+
 
 //It takes the Directory for the all the handlebars Partials files as its only arguments
 
@@ -16,14 +19,15 @@ app.set('view engine','hbs');
 
 app.use((req,res,next) => {
     var now = new Date().toString();
-    var log = console.log(`${now}: ${req.method} ${req.url}`);
+    var log = (`${now}: ${req.method} ${req.url}`);
     
     console.log(log);
-    next();
-    fs.appendFile('server.log', log , (err) => {
+   
+    fs.appendFile('server.log', log + '\n' , (err) => {
         if (err) {
             console.log('Unable to append to server.log')
         }
+        next();
         
     });
 });
@@ -78,6 +82,6 @@ res.send({
 });
 });
 
-app.listen(3000,() => {
-console.log('Server is up on Port 3000')
+app.listen(port,() => {
+console.log(`Server is up on Port ${port}`)
 });
